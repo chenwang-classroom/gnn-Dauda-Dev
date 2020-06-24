@@ -8,7 +8,7 @@ import torch.nn as nn
 class GAT(nn.Module):
     def __init__(self, nfeat, nhid, nclass, dropout=0.5, alpha=0.2, nheads=8):
         '''
-        GAT: Graph Attention Network
+        GAT: Graph Attention Network, ICLR 2018
         https://arxiv.org/pdf/1710.10903.pdf
         '''
         super(GAT, self).__init__()

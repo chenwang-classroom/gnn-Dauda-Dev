@@ -7,7 +7,7 @@ import torch.nn as nn
 
 class GCN(nn.Module):
     '''
-    GCN: Graph Convolutional Network
+    GCN: Graph Convolutional Network, ICLR 2017
     https://arxiv.org/pdf/1609.02907.pdf
     '''
     def __init__(self, nfeat, nhid, nclass, dropout):

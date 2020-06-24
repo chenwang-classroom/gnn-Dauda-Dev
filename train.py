@@ -7,8 +7,9 @@ import argparse
 import torch.nn as nn
 import torch.optim as optim
 
-from gcn import GCN
-from datasets import citation
+from models import GCN, GAT
+from datasets import citation, Citation
+from torch_util import EarlyStopScheduler
 
 
 def accuracy(output, labels):
@@ -43,8 +44,9 @@ def test(model, criterion):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--device", type=str, default='cuda:0', help="cpu, cuda:0, cuda:1, etc.")
+    parser.add_argument("--model", type=str, default='GCN', help="GCN or GAT")
     parser.add_argument("--data-root", type=str, default='.', help="dataset location")
-    parser.add_argument("--dataset", type=str, default='citeseer', help="cora, citeseer, or pubmed")
+    parser.add_argument("--dataset", type=str, default='cora', help="cora, citeseer, or pubmed")
     parser.add_argument('--seed', type=int, default=1, help='Random seed.')
     parser.add_argument('--epochs', type=int, default=200, help='Number of epochs to train.')
     parser.add_argument('--lr', type=float, default=0.01, help='Initial learning rate.')
@@ -55,8 +57,10 @@ if __name__ == "__main__":
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
 
-    adj, features, labels, idx_train, idx_val, idx_test = citation(root=args.data_root, name=args.dataset, device=args.device)
-    model = GCN(nfeat=features.size(1), nhid=args.hidden, nclass=labels.max().item()+1, dropout=args.dropout).to(args.device)
+    data = citation(root=args.data_root, name=args.dataset, device=args.device)
+    adj, features, labels, idx_train, idx_val, idx_test, feat_len, num_class = data
+    Model = GCN if args.model == 'GCN' else GAT
+    model = Model(nfeat=feat_len, nhid=args.hidden, nclass=num_class, dropout=args.dropout).to(args.device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     criterion = nn.CrossEntropyLoss()
 
@@ -70,7 +74,7 @@ if __name__ == "__main__":
           'acc_val: {:.4f}'.format(acc_val.item()),
           'time: {:.4f}s'.format(t))
 
-    print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
+    print("Total time elapsed: {:.4f}s".format(time.time()-t_total))
     loss_test, acc_test = test(model, criterion)
-    print("Test results:", "loss= {:.4f}".format(loss_test.item()), 
-        "accuracy= {:.4f}".format(acc_test.item()))
+    print("Test results:", "loss: {:.4f}".format(loss_test.item()),
+        "accuracy: {:.4f}".format(acc_test.item()))

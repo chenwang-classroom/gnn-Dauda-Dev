@@ -17,7 +17,7 @@ def performance(loader, net, device):
     net.eval()
     correct, total = 0, 0
     with torch.no_grad():
-        for batch_idx, (inputs, targets, neighbor) in enumerate(tqdm.tqdm(loader)):
+        for batch_idx, (inputs, targets, neighbor) in enumerate(loader):
             if torch.cuda.is_available():
                 inputs, targets, neighbor = inputs.to(device), targets.to(device), [item.to(device) for item in neighbor]
             outputs = net(inputs, neighbor)
@@ -28,11 +28,11 @@ def performance(loader, net, device):
     return acc
 
 
-def train(loader, net, criterion, optimizer):
+def train(loader, net, criterion, optimizer, device):
     net.train()
     train_loss, correct, total = 0, 0, 0
-    for batch_idx, (inputs, targets, neighbor) in enumerate(tqdm.tqdm(loader)):
-        inputs, targets, neighbor = inputs.to(args.device), targets.to(args.device), [item.to(args.device) for item in neighbor]
+    for batch_idx, (inputs, targets, neighbor) in enumerate(loader):
+        inputs, targets, neighbor = inputs.to(device), targets.to(device), [item.to(device) for item in neighbor]
         optimizer.zero_grad()
         outputs = net(inputs, neighbor)
         loss = criterion(outputs, targets)
@@ -57,10 +57,10 @@ if __name__ == '__main__':
     parser.add_argument("--optm", type=str, default='Adam', help="SGD or Adam")
     parser.add_argument("--lr", type=float, default=0.01, help="learning rate")
     parser.add_argument("--factor", type=float, default=0.1, help="ReduceLROnPlateau factor")
-    parser.add_argument("--min-lr", type=float, default=0.01, help="minimum lr for ReduceLROnPlateau")
-    parser.add_argument("--patience", type=int, default=5, help="patience for Early Stop")
+    parser.add_argument("--min-lr", type=float, default=0.001, help="minimum lr for ReduceLROnPlateau")
+    parser.add_argument("--patience", type=int, default=10, help="patience for Early Stop")
     parser.add_argument("--batch-size", type=int, default=10, help="number of minibatch size")
-    parser.add_argument("--epochs", type=int, default=20, help="number of training epochs")
+    parser.add_argument("--epochs", type=int, default=100, help="number of training epochs")
     parser.add_argument("--early-stop", type=int, default=5e-4, help="number of epochs for early stop training")
     parser.add_argument('--weight_decay', type=float, default=0, help='Weight decay (L2 loss on parameters).')
     parser.add_argument("--seed", type=int, default=0, help='Random seed.')
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     val_loader = Data.DataLoader(dataset=val_data, batch_size=args.batch_size, shuffle=False, collate_fn=graph_collate)
     test_data = Citation(root=args.data_root, name=args.dataset, data_type='test')
     test_loader = Data.DataLoader(dataset=test_data, batch_size=args.batch_size, shuffle=False, collate_fn=graph_collate)
-    
+
     # Models
     net = SAGE(feat_len=train_data.feat_len, num_class=train_data.num_class).to(args.device)
     criterion = nn.CrossEntropyLoss()
@@ -85,9 +85,9 @@ if __name__ == '__main__':
     print('number of parameters:', count_parameters(net))
     best_acc = 0
     for epoch in range(args.epochs):
-        train_loss, train_acc = train(train_loader, net, criterion, optimizer)
+        train_loss, train_acc = train(train_loader, net, criterion, optimizer, args.device)
         val_acc = performance(val_loader, net, args.device) # validate
-        print("epoch: %d, train_loss: %.4f, train_acc: %.3f, test_acc: %.3f"
+        print("epoch: %d, train_loss: %.4f, train_acc: %.3f, val_acc: %.3f"
                 % (epoch, train_loss, train_acc, val_acc))
 
         if val_acc > best_acc:

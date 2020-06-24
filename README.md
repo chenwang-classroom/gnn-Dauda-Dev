@@ -34,6 +34,6 @@ Tutorial for graph neural network
 
    * Training
 
-         python3 train_sage.py --epochs 100 --lr 0.01 --dataset cora 
-         python3 train_sage.py --epochs 100 --lr 0.01 --dataset pubmed
-         python3 train_sage.py --epochs 100 --lr 0.01 --dataset citeseer
+         python3 train_sage.py --lr 0.01 --dataset cora
+         python3 train_sage.py --lr 0.01 --dataset pubmed
+         python3 train_sage.py --lr 0.01 --dataset citeseer

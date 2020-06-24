@@ -1,10 +1,33 @@
+#!/usr/bin/env python3
+
 import math
 import torch
-import numpy as np
 import torch.nn as nn
 
 
-class Attention(nn.Module):
+class GAT(nn.Module):
+    def __init__(self, nfeat, nhid, nclass, dropout=0.5, alpha=0.2, nheads=8):
+        '''
+        GAT: Graph Attention Network
+        https://arxiv.org/pdf/1710.10903.pdf
+        '''
+        super(GAT, self).__init__()
+
+        self.attns = [GraphAttn(nfeat, nhid, dropout, alpha) for _ in range(nheads)]
+        for i, attention in enumerate(self.attns):
+            self.add_module('attention_{}'.format(i), attention)
+
+        self.attn = GraphAttn(nhid * nheads, nclass, dropout, alpha)
+        self.dropout1 = nn.Dropout(dropout)
+        self.dropout2 = nn.Dropout(dropout)
+        self.acvt = nn.ELU()
+
+    def forward(self, x, adj):
+        x = torch.cat([attn(self.dropout1(x), adj) for attn in self.attns], dim=1)
+        return self.attn(self.dropout2(self.acvt(x)), adj)
+
+
+class GraphAttn(nn.Module):
     def __init__(self, in_features, out_features, dropout, alpha):
         super().__init__()
         self.tran = nn.Linear(in_features, out_features, bias=False)
@@ -19,22 +42,3 @@ class Attention(nn.Module):
         e = self.leakyrelu(e.squeeze())
         e[adj.to_dense()<=0] = -math.inf # only neighbors
         return self.norm(e) @ h
-
-
-class GAT(nn.Module):
-    def __init__(self, nfeat, nhid, nclass, dropout=0.5, alpha=0.2, nheads=8):
-        """Dense version of GAT."""
-        super(GAT, self).__init__()
-
-        self.atts = [Attention(nfeat, nhid, dropout, alpha) for _ in range(nheads)]
-        for i, attention in enumerate(self.atts):
-            self.add_module('attention_{}'.format(i), attention)
-
-        self.att = Attention(nhid * nheads, nclass, dropout, alpha)
-        self.dropout1 = nn.Dropout(dropout)
-        self.dropout2 = nn.Dropout(dropout)
-        self.acvt = nn.ELU()
-
-    def forward(self, x, adj):
-        x = torch.cat([att(self.dropout1(x), adj) for att in self.atts], dim=1)
-        return self.att(self.dropout2(self.acvt(x)), adj)

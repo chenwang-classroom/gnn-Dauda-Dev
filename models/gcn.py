@@ -3,10 +3,13 @@
 import math
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class GCN(nn.Module):
+    '''
+    GCN: Graph Convolutional Network
+    https://arxiv.org/pdf/1609.02907.pdf
+    '''
     def __init__(self, nfeat, nhid, nclass, dropout):
         super(GCN, self).__init__()
         self.gc1 = GraphConv(nfeat, nhid)

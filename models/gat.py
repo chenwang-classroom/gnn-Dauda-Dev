@@ -36,7 +36,5 @@ class GAT(nn.Module):
         self.acvt = nn.ELU()
 
     def forward(self, x, adj):
-        x = self.dropout1(x)
-        x = torch.cat([att(x, adj) for att in self.atts], dim=1)
-        x = self.dropout2(self.acvt(x))
-        return self.att(x, adj)
+        x = torch.cat([att(self.dropout1(x), adj) for att in self.atts], dim=1)
+        return self.att(self.dropout2(self.acvt(x)), adj)

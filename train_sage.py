@@ -54,7 +54,7 @@ if __name__ == '__main__':
     parser.add_argument("--data-root", type=str, default='/data/datasets', help="learning rate")
     parser.add_argument("--dataset", type=str, default='cora', help="cora, citeseer, pubmed")
     parser.add_argument("--save", type=str, default=None, help="model file to save")
-    parser.add_argument("--optm", type=str, default='Adam', help="SGD or Adam")
+    parser.add_argument("--aggr", type=str, default='mean', help="mean, pool or gcn")
     parser.add_argument("--lr", type=float, default=0.01, help="learning rate")
     parser.add_argument("--factor", type=float, default=0.1, help="ReduceLROnPlateau factor")
     parser.add_argument("--min-lr", type=float, default=0.001, help="minimum lr for ReduceLROnPlateau")
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     test_loader = Data.DataLoader(dataset=test_data, batch_size=args.batch_size, shuffle=False, collate_fn=graph_collate)
 
     # Models
-    net = SAGE(feat_len=train_data.feat_len, num_class=train_data.num_class).to(args.device)
+    net = SAGE(feat_len=train_data.feat_len, num_class=train_data.num_class, aggr=args.aggr).to(args.device)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(net.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     scheduler = EarlyStopScheduler(optimizer, factor=args.factor, verbose=True, min_lr=args.min_lr, patience=args.patience)

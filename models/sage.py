@@ -57,7 +57,7 @@ class PoolAggregator(nn.Module):
         self.tran = nn.Linear(in_features, out_features, True)
 
     def forward(self, x, neighbor):
-        f = [self.tran(torch.cat([x[i:i+1], neighbor[i]], dim=0)) for i in range(x.size(0))]
+        f = [self.tran(torch.cat([x[i:i+1], n])) for i, n in enumerate(neighbor)]
         x = torch.cat([x.max(dim=0, keepdim=True)[0] for x in f])
         neighbor = [self.tran(n).max(dim=0, keepdim=True)[0] for n in neighbor]
         return x, neighbor

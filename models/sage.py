@@ -26,18 +26,6 @@ class SAGE(nn.Module):
         return self.classifier(self.acvt2(x))
 
 
-class PoolAggregator(nn.Module):
-    def __init__(self, in_features, out_features):
-        super().__init__()
-        self.tran = nn.Linear(in_features, out_features, True)
-
-    def forward(self, x, neighbor):
-        f = [self.tran(torch.cat([x[i:i+1], neighbor[i]], dim=0)) for i in range(x.size(0))]
-        x = torch.cat([x.max(dim=0, keepdim=True)[0] for x in f])
-        neighbor = [self.tran(n).max(dim=0, keepdim=True)[0] for n in neighbor]
-        return x, neighbor
-
-
 class MeanAggregator(nn.Module):
     def __init__(self, in_features, out_features):
         super().__init__()
@@ -60,4 +48,16 @@ class GCNAggregator(nn.Module):
         f = torch.cat([n.mean(dim=0, keepdim=True) for n in neighbor])
         x = self.tran(x+f)
         neighbor = [self.tran(n) for n in neighbor]
+        return x, neighbor
+
+
+class PoolAggregator(nn.Module):
+    def __init__(self, in_features, out_features):
+        super().__init__()
+        self.tran = nn.Linear(in_features, out_features, True)
+
+    def forward(self, x, neighbor):
+        f = [self.tran(torch.cat([x[i:i+1], neighbor[i]], dim=0)) for i in range(x.size(0))]
+        x = torch.cat([x.max(dim=0, keepdim=True)[0] for x in f])
+        neighbor = [self.tran(n).max(dim=0, keepdim=True)[0] for n in neighbor]
         return x, neighbor

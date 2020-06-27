@@ -44,7 +44,7 @@ def test(model, criterion):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--device", type=str, default='cuda:0', help="cpu, cuda:0, cuda:1, etc.")
-    parser.add_argument("--model", type=str, default='GCN', help="GCN or GAT")
+    parser.add_argument("--model", type=str, default='GCN', help="GCN/gcn or GAT/gat")
     parser.add_argument("--data-root", type=str, default='.', help="dataset location")
     parser.add_argument("--dataset", type=str, default='cora', help="cora, citeseer, or pubmed")
     parser.add_argument('--seed', type=int, default=1, help='Random seed.')
@@ -54,12 +54,13 @@ if __name__ == "__main__":
     parser.add_argument('--hidden', type=int, default=16, help='Number of hidden units.')
     parser.add_argument('--dropout', type=float, default=0.5, help='Dropout rate.')
     args = parser.parse_args(); print(args)
+    models = {'gcn':GCN, 'gat':GAT}
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
 
     data = citation(root=args.data_root, name=args.dataset, device=args.device)
     adj, features, labels, idx_train, idx_val, idx_test, feat_len, num_class = data
-    Model = GCN if args.model == 'GCN' else GAT
+    Model = models[args.model.lower()]
     model = Model(nfeat=feat_len, nhid=args.hidden, nclass=num_class, dropout=args.dropout).to(args.device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     criterion = nn.CrossEntropyLoss()

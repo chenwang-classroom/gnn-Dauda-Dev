@@ -11,8 +11,7 @@ class GAT(nn.Module):
         GAT: Graph Attention Network, ICLR 2018
         https://arxiv.org/pdf/1710.10903.pdf
         '''
-        super(GAT, self).__init__()
-
+        super().__init__()
         self.attns = [GraphAttn(nfeat, nhid, dropout, alpha) for _ in range(nheads)]
         for i, attention in enumerate(self.attns):
             self.add_module('attention_{}'.format(i), attention)

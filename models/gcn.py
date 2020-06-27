@@ -11,7 +11,7 @@ class GCN(nn.Module):
     https://arxiv.org/pdf/1609.02907.pdf
     '''
     def __init__(self, nfeat, nhid, nclass, dropout):
-        super(GCN, self).__init__()
+        super().__init__()
         self.gc1 = GraphConv(nfeat, nhid)
         self.gc2 = GraphConv(nhid, nclass)
         self.acvt = nn.Sequential(nn.ReLU(), nn.Dropout(dropout))
@@ -25,7 +25,7 @@ class GCN(nn.Module):
 
 class GraphConv(nn.Module):
     def __init__(self, in_features, out_features, bias=True):
-        super(GraphConv, self).__init__()
+        super().__init__()
         self.linear = nn.Linear(in_features, out_features, bias)
 
     def forward(self, input, adj):

@@ -53,7 +53,7 @@ if __name__ == "__main__":
     parser.add_argument('--weight_decay', type=float, default=5e-4, help='Weight decay (L2 loss on parameters).')
     parser.add_argument('--hidden', type=int, default=16, help='Number of hidden units.')
     parser.add_argument('--dropout', type=float, default=0.5, help='Dropout rate.')
-    args = parser.parse_args()
+    args = parser.parse_args(); print(args)
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
 

@@ -1,5 +1,5 @@
 # GNN Tutorial
-Tutorial for graph neural network
+Efficient PyTorch implementation for graph neural networks.
 
 # Dependencies
 

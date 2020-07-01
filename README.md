@@ -38,6 +38,17 @@ Efficient PyTorch implementation for graph neural networks (GNN).
          python3 train_sage.py --lr 0.01 --dataset pubmed
          python3 train_sage.py --lr 0.01 --dataset citeseer
 
+
+## APPNP
+
+   * [APPNP: Predict then Propagate: Graph Neural Networks Meet Personalized Pagerank, ICLR 2019](https://arxiv.org/pdf/1810.05997.pdf)
+
+   * Training
+
+            python3 train.py --model APPNP --hidden 64 --epochs 100 --lr 0.01 --dataset cora
+            python3 train.py --model APPNP --hidden 64 --epochs 100 --lr 0.01 --dataset pubmed
+            python3 train.py --model APPNP --hidden 64 --epochs 100 --lr 0.01 --dataset citeseer
+
 # Usage
 
 * train.py

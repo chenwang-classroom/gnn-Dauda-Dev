@@ -5,7 +5,7 @@ import torch.nn as nn
 
 class APPNP(nn.Module):
     '''
-    APPNP, ICLR 2019
+    APPNP: ICLR 2019
     Predict then Propagate: Graph Neural Networks Meet Personalized Pagerank
     https://arxiv.org/pdf/1810.05997.pdf
     '''

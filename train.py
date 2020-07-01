@@ -7,7 +7,7 @@ import argparse
 import torch.nn as nn
 import torch.optim as optim
 
-from models import GCN, GAT
+from models import GCN, GAT, APPNP
 from datasets import citation, Citation
 from torch_util import EarlyStopScheduler
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     parser.add_argument('--hidden', type=int, default=16, help='Number of hidden units.')
     parser.add_argument('--dropout', type=float, default=0.5, help='Dropout rate.')
     args = parser.parse_args(); print(args)
-    models = {'gcn':GCN, 'gat':GAT}
+    models = {'gcn':GCN, 'gat':GAT, 'appnp':APPNP}
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
 

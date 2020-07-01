@@ -44,7 +44,7 @@ def test(model, criterion):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--device", type=str, default='cuda:0', help="cpu, cuda:0, cuda:1, etc.")
-    parser.add_argument("--model", type=str, default='GCN', help="GCN/gcn or GAT/gat")
+    parser.add_argument("--model", type=str, default='GCN', help="GCN, GAT, or APPNP")
     parser.add_argument("--data-root", type=str, default='.', help="dataset location")
     parser.add_argument("--dataset", type=str, default='cora', help="cora, citeseer, or pubmed")
     parser.add_argument('--seed', type=int, default=1, help='Random seed.')

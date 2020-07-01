@@ -5,8 +5,9 @@ import torch.nn as nn
 
 class APPNP(nn.Module):
     '''
-    APPNP: Predict then Propagate: Graph Neural Networks Meet Personalized Pagerank, ICLR 2019
-    https://arxiv.org/pdf/1609.02907.pdf
+    APPNP, ICLR 2019
+    Predict then Propagate: Graph Neural Networks Meet Personalized Pagerank
+    https://arxiv.org/pdf/1810.05997.pdf
     '''
     def __init__(self, nfeat, nhid, nclass, dropout=0.5, alpha=0.1):
         super().__init__()
@@ -14,7 +15,7 @@ class APPNP(nn.Module):
         self.app1 = GraphAppnp(alpha)
         self.app2 = GraphAppnp(alpha)
         self.acvt = nn.Sequential(nn.ReLU(), nn.Dropout(dropout))
-        self.classifier = nn.Sequential(nn.Flatten(), nn.Linear(nhid, nclass))
+        self.classifier = nn.Linear(nhid, nclass)
 
     def forward(self, x, adj):
         h = self.tran(x)
@@ -25,7 +26,7 @@ class APPNP(nn.Module):
 
 
 class GraphAppnp(nn.Module):
-    def __init__(self, alpha=0.1):
+    def __init__(self, alpha):
         super().__init__()
         self.alpha = alpha
 

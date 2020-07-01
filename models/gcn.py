@@ -26,5 +26,5 @@ class GraphConv(nn.Module):
         super().__init__()
         self.linear = nn.Linear(in_features, out_features, bias)
 
-    def forward(self, input, adj):
-        return adj @ self.linear(input)
+    def forward(self, x, adj):
+        return adj @ self.linear(x)

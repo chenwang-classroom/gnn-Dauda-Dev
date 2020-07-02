@@ -9,7 +9,6 @@ import torch.optim as optim
 
 from models import GCN, GAT, APPNP
 from datasets import citation, Citation
-from torch_util import EarlyStopScheduler
 
 
 def accuracy(output, labels):

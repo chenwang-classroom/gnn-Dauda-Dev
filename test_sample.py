@@ -45,7 +45,7 @@ def test():
     warnings.filterwarnings("ignore")
     class Args:
         def __init__(self):
-            self.device = 'cuda:0'
+            self.device = 'cpu'
             self.model = 'GCN'
             self.data_root = '.'
             self.dataset = 'cora'

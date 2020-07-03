@@ -18,7 +18,7 @@ def accuracy(output, labels):
     return correct / len(labels)
 
 
-def train(model, optimizer, criterion):
+def train(model, optimizer, criterion, features, labels, adj, idx_train, idx_val):
     t = time.time()
     model.train()
     optimizer.zero_grad()
@@ -32,7 +32,7 @@ def train(model, optimizer, criterion):
     return loss_train, acc_train, loss_val, acc_val, time.time() - t
 
 
-def test(model, criterion):
+def test(model, criterion, features, labels, adj, idx_test):
     model.eval()
     output = model(features, adj)
     loss_test = criterion(output[idx_test], labels[idx_test])
@@ -66,7 +66,8 @@ if __name__ == "__main__":
 
     t_total = time.time()
     for epoch in range(args.epochs):
-        loss_train, acc_train, loss_val, acc_val, t = train(model, optimizer, criterion)
+        results = train(model, optimizer, criterion, features, labels, adj, idx_train, idx_val)
+        loss_train, acc_train, loss_val, acc_val, t = results
         print('Epoch: {:04d}'.format(epoch+1),
           'loss_train: {:.4f}'.format(loss_train.item()),
           'acc_train: {:.4f}'.format(acc_train.item()),
@@ -75,6 +76,6 @@ if __name__ == "__main__":
           'time: {:.4f}s'.format(t))
 
     print("Total time elapsed: {:.4f}s".format(time.time()-t_total))
-    loss_test, acc_test = test(model, criterion)
+    loss_test, acc_test = test(model, criterion, features, labels, adj, idx_test)
     print("Test results:", "loss: {:.4f}".format(loss_test.item()),
         "accuracy: {:.4f}".format(acc_test.item()))

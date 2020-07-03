@@ -46,14 +46,14 @@ def test():
     class Args:
         def __init__(self):
             self.device = 'cpu'
-            self.model = 'GCN'
+            self.model = 'appnp'
             self.data_root = '.'
             self.dataset = 'cora'
             self.seed = 0
             self.epochs = 100
             self.lr = 0.01
             self.weight_decay = 5e-4
-            self.hidden = 16
+            self.hidden = 64
             self.dropout = 0.5
 
     args = Args()

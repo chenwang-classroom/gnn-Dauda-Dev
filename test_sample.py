@@ -33,7 +33,7 @@ def train(model, optimizer, criterion, features, labels, adj, idx_train, idx_val
     return loss_train, acc_train, loss_val, acc_val, time.time() - t
 
 
-def ttest(model, criterion, features, labels, adj, idx_test):
+def model_test(model, criterion, features, labels, adj, idx_test):
     model.eval()
     output = model(features, adj)
     loss_test = criterion(output[idx_test], labels[idx_test])
@@ -80,7 +80,7 @@ def test():
           'time: {:.4f}s'.format(t))
 
     print("Total time elapsed: {:.4f}s".format(time.time()-t_total))
-    loss_test, acc_test = ttest(model, criterion, features, labels, adj, idx_test)
+    loss_test, acc_test = model_test(model, criterion, features, labels, adj, idx_test)
     print("Test results:", "loss: {:.4f}".format(loss_test.item()),
         "accuracy: {:.4f}".format(acc_test.item()))
     

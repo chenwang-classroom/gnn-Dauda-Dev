@@ -3,8 +3,8 @@ Efficient PyTorch implementation for graph neural networks (GNN).
 
 # Dependencies
 
-   * PyTorch
-   * DGL (Only used for automatically dataset downloading)
+   * [PyTorch](https://pytorch.org/get-started/locally)
+   * [DGL](https://www.dgl.ai/pages/start.html) (Only used for automatically dataset downloading)
 
 # Training
 

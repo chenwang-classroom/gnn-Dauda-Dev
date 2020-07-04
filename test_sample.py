@@ -84,4 +84,4 @@ def test():
     print("Test results:", "loss: {:.4f}".format(loss_test.item()),
         "accuracy: {:.4f}".format(acc_test.item()))
     
-    assert acc_test.item() > 0.82
+    assert acc_test.item() > 0.83

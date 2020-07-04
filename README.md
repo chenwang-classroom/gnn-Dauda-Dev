@@ -61,7 +61,7 @@ Efficient PyTorch implementation for graph neural networks (GNN).
       optional arguments:
         -h, --help            show this help message and exit
         --device DEVICE       cpu, cuda:0, cuda:1, etc.
-        --model MODEL         GCN/gcn or GAT/gat
+        --model MODEL         GCN, GAT, or APPNP
         --data-root DATA_ROOT
                               dataset location
         --dataset DATASET     cora, citeseer, or pubmed

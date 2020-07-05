@@ -11,6 +11,9 @@ class APPNP(nn.Module):
     '''
     def __init__(self, nfeat, nhid, nclass, dropout=0.5, alpha=0.1):
         super().__init__()
+        '''
+        You may redefine the model.
+        '''
         self.tran = nn.Linear(nfeat, nhid)
         self.app1 = GraphAppnp(alpha)
         self.app2 = GraphAppnp(alpha)
@@ -31,4 +34,7 @@ class GraphAppnp(nn.Module):
         self.alpha = alpha
 
     def forward(self, x, adj, h):
-        return (1 - self.alpha) * adj @ x + self.alpha * h
+        '''
+        You need to redefine the layer
+        '''
+        return x

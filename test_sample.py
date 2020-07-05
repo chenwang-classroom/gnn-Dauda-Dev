@@ -49,7 +49,7 @@ def test():
             self.model = 'appnp'
             self.data_root = '.'
             self.dataset = 'cora'
-            self.seed = 0
+            self.seed = 1
             self.epochs = 100
             self.lr = 0.01
             self.weight_decay = 5e-4

@@ -4,7 +4,31 @@ Efficient PyTorch implementation for graph neural networks (GNN).
 # Dependencies
 
    * [PyTorch](https://pytorch.org/get-started/locally)
-   * [DGL](https://www.dgl.ai/pages/start.html) (Only used for automatically dataset downloading)
+   * [DGL==0.4.3](https://www.dgl.ai/pages/start.html) (Only used for automatically dataset downloading)
+   
+          pip3 install -r requirements.txt
+   Note that only DGL==0.4.3 will be produce correct results. Newer version will download a different dataset.
+
+# Job
+
+  Your job is to fill the class of APPNP to pass the test. To test locally, simply run:
+  
+      pytest
+
+  More specifically, change the forward definition of GraphAppnp in the file of "models/appnp.py".
+
+    class GraphAppnp(nn.Module):
+        def __init__(self, alpha):
+            super().__init__()
+            self.alpha = alpha
+
+        def forward(self, x, adj, h):
+            '''
+            You need to redefine the layer
+            '''
+            return x
+
+  You may also need to change the hyperparameters at Line53-Line57 in the file of "test_sample.py"
 
 # Training
 
